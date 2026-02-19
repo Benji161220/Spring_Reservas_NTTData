@@ -45,7 +45,7 @@ public class ReservaService {
     public ReservaDTO create(ReservaDTO dto) {
         Reserva reserva = ReservaMapper.toEntity(dto);
         reserva.setId(null);
-        reserva.setAsistio(true);
+        reserva.setAsistio(null);
         reserva.setDeleted(false);
         return ReservaMapper.toDTO(reservaRepository.save(reserva));
     }
