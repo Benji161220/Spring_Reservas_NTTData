@@ -1,6 +1,4 @@
-package org.nttdata.spring.user.entity;
-
-import jakarta.persistence.Entity;
+package org.nttdata.spring.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "usuario") // usa el nombre exacto de la tabla
+@Table(name = "usuarios")
 public class Usuario {
 
     @Id
@@ -19,10 +17,10 @@ public class Usuario {
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
-    @Column(name = "email", nullable = false, length = 150)
+    @Column(name = "email", nullable = false, unique = true, length = 150)
     private String email;
 
-    @Column(name = "password_h", nullable = false, length = 255)
+    @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
     @Column(name = "rol", nullable = false, length = 20)
