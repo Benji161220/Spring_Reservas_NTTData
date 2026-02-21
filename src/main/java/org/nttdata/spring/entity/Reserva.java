@@ -17,8 +17,8 @@ public class Reserva {
     @Column(name = "id_usuario", nullable = false)
     private Integer idUsuario;
 
-    @Column(name = "id_zona", nullable = false)
-    private Integer idZona;
+    @Column(name = "id_puesto", nullable = false)
+    private Integer idPuesto;
 
     @Column(name = "fecha_inicio", nullable = false)
     private LocalDateTime fechaInicio;

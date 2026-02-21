@@ -12,8 +12,8 @@ public class ReservaDTO {
     @NotNull(message = "El ID de usuario es obligatorio")
     private Integer idUsuario;
 
-    @NotNull(message = "El ID de zona es obligatorio")
-    private Integer idZona;
+    @NotNull(message = "El ID de puesto es obligatorio")
+    private Integer idPuesto;
 
     @NotNull(message = "La fecha de inicio es obligatoria")
     private LocalDateTime fechaInicio;
