@@ -2,12 +2,14 @@ package org.nttdata.spring.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.SoftDelete;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Data
 @Table(name = "reservas")
+@SoftDelete
 public class Reserva {
 
     @Id
