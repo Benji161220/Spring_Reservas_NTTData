@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @Table(name = "reservas")
-@SoftDelete
 public class Reserva {
 
     @Id
