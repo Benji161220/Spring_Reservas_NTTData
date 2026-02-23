@@ -2,6 +2,7 @@ package org.nttdata.spring.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.SoftDelete;
 
 import java.time.LocalDateTime;
 
@@ -17,8 +18,8 @@ public class Reserva {
     @Column(name = "id_usuario", nullable = false)
     private Integer idUsuario;
 
-    @Column(name = "id_zona", nullable = false)
-    private Integer idZona;
+    @Column(name = "id_puesto", nullable = false)
+    private Integer idPuesto;
 
     @Column(name = "fecha_inicio", nullable = false)
     private LocalDateTime fechaInicio;

@@ -36,8 +36,8 @@ public class ReservaService {
                 .toList();
     }
 
-    public List<ReservaDTO> findByZonaId(Integer zonaId) {
-        return reservaRepository.findByIdZonaAndDeletedFalse(zonaId).stream()
+    public List<ReservaDTO> findByPuestoId(Integer puestoId) {
+        return reservaRepository.findByIdPuestoAndDeletedFalse(puestoId).stream()
                 .map(ReservaMapper::toDTO)
                 .toList();
     }
@@ -54,7 +54,7 @@ public class ReservaService {
         Reserva reserva = reservaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada con id: " + id));
         reserva.setIdUsuario(dto.getIdUsuario());
-        reserva.setIdZona(dto.getIdZona());
+        reserva.setIdPuesto(dto.getIdPuesto());
         reserva.setFechaInicio(dto.getFechaInicio());
         reserva.setFechaFinal(dto.getFechaFinal());
         reserva.setAsistio(dto.getAsistio());

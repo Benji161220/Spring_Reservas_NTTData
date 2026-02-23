@@ -11,7 +11,7 @@ public class ReservaMapper {
         ReservaDTO dto = new ReservaDTO();
         dto.setId(entity.getId());
         dto.setIdUsuario(entity.getIdUsuario());
-        dto.setIdZona(entity.getIdZona());
+        dto.setIdPuesto(entity.getIdPuesto());  // ← Cambiado
         dto.setFechaInicio(entity.getFechaInicio());
         dto.setFechaFinal(entity.getFechaFinal());
         dto.setAsistio(entity.getAsistio());
@@ -23,7 +23,7 @@ public class ReservaMapper {
         Reserva entity = new Reserva();
         entity.setId(dto.getId());
         entity.setIdUsuario(dto.getIdUsuario());
-        entity.setIdZona(dto.getIdZona());
+        entity.setIdPuesto(dto.getIdPuesto());  // ← Cambiado
         entity.setFechaInicio(dto.getFechaInicio());
         entity.setFechaFinal(dto.getFechaFinal());
         entity.setAsistio(dto.getAsistio());

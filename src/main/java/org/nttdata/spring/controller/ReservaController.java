@@ -34,9 +34,9 @@ public class ReservaController {
         return ResponseEntity.ok(reservaService.findByUsuarioId(usuarioId));
     }
 
-    @GetMapping("/zona/{zonaId}")
-    public ResponseEntity<List<ReservaDTO>> findByZonaId(@PathVariable Integer zonaId) {
-        return ResponseEntity.ok(reservaService.findByZonaId(zonaId));
+    @GetMapping("/puesto/{puestoId}")
+    public ResponseEntity<List<ReservaDTO>> findByPuestoId(@PathVariable Integer puestoId) {
+        return ResponseEntity.ok(reservaService.findByPuestoId(puestoId));
     }
 
     @PostMapping
