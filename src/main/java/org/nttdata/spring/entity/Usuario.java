@@ -29,8 +29,8 @@ public class Usuario {
     @Column(name = "penalizaciones")
     private Integer penalizacion = 0;
 
-    @Column(name = "oficina_actual")
-    private Integer oficinaActual;
+    @Column(name = "id_oficina")
+    private Integer idOficina;
 
     @Column(name = "creado_en")
     private LocalDateTime creadoEn;

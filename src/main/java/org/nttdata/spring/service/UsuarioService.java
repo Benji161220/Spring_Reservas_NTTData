@@ -36,7 +36,7 @@ public class UsuarioService {
         usuario.setNombre(dto.getNombre());
         usuario.setRol(dto.getRol());
         usuario.setPenalizacion(dto.getPenalizacion());
-        usuario.setOficinaActual(dto.getOficinaActual());
+        usuario.setIdOficina(dto.getOficinaActual());
         return UsuarioMapper.toDTO(usuarioRepository.save(usuario));
     }
 
