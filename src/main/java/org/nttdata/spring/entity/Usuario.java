@@ -26,10 +26,10 @@ public class Usuario {
     @Column(name = "rol", nullable = false, length = 20)
     private String rol;
 
-    @Column(name = "penalizacion")
+    @Column(name = "penalizaciones")
     private Integer penalizacion = 0;
 
-    @Column(name = "oficina_actu")
+    @Column(name = "oficina_actual")
     private Integer oficinaActual;
 
     @Column(name = "creado_en")
