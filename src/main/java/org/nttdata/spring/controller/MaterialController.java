@@ -6,6 +6,7 @@ import org.nttdata.spring.service.MaterialService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
 
 import java.util.List;
 
@@ -20,26 +21,31 @@ public class MaterialController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar materiales")
     public ResponseEntity<List<MaterialDTO>> findAll() {
         return ResponseEntity.ok(materialService.findAll());
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener material por ID")
     public ResponseEntity<MaterialDTO> findById(@PathVariable Integer id) {
         return ResponseEntity.ok(materialService.findById(id));
     }
 
     @PostMapping
+    @Operation(summary = "Crear material")
     public ResponseEntity<MaterialDTO> create(@Valid @RequestBody MaterialDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(materialService.create(dto));
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar material por ID")
     public ResponseEntity<MaterialDTO> update(@PathVariable Integer id, @Valid @RequestBody MaterialDTO dto) {
         return ResponseEntity.ok(materialService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar material por ID")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         materialService.delete(id);
         return ResponseEntity.noContent().build();
