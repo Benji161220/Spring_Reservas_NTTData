@@ -8,7 +8,9 @@ import java.util.List;
 
 @Repository
 public interface ReservaRepository extends JpaRepository<Reserva, Integer> {
-    List<Reserva> findByIdUsuarioAndDeletedFalse(Integer idUsuario);
-    List<Reserva> findByIdPuestoAndDeletedFalse(Integer idPuesto);
+    List<Reserva> findByUsuarioIdAndDeletedFalse(Integer usuarioId);
+
+    List<Reserva> findByPuestoIdAndDeletedFalse(Integer puestoId);
+
     List<Reserva> findByDeletedFalse();
 }

@@ -2,6 +2,7 @@ package org.nttdata.spring.service;
 
 import org.nttdata.spring.dto.PuestoDTO;
 import org.nttdata.spring.entity.Puesto;
+import org.nttdata.spring.entity.Zona;
 import org.nttdata.spring.exception.ResourceNotFoundException;
 import org.nttdata.spring.mapper.PuestoMapper;
 import org.nttdata.spring.repository.PuestoRepository;
@@ -31,7 +32,7 @@ public class PuestoService {
     }
 
     public List<PuestoDTO> findByZonaId(Integer zonaId) {
-        return puestoRepository.findByIdZona(zonaId).stream()
+        return puestoRepository.findByZonaId(zonaId).stream()
                 .map(PuestoMapper::toDTO)
                 .toList();
     }
@@ -48,7 +49,13 @@ public class PuestoService {
     public PuestoDTO update(Integer id, PuestoDTO dto) {
         Puesto puesto = puestoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Puesto no encontrado con id: " + id));
-        puesto.setIdZona(dto.getIdZona());
+        if (dto.getIdZona() != null) {
+            Zona zona = new Zona();
+            zona.setId(dto.getIdZona());
+            puesto.setZona(zona);
+        } else {
+            puesto.setZona(null);
+        }
         puesto.setNombre(dto.getNombre());
         puesto.setCodigo(dto.getCodigo());
         return PuestoMapper.toDTO(puestoRepository.save(puesto));

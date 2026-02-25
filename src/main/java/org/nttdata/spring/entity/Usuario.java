@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -29,9 +30,13 @@ public class Usuario {
     @Column(name = "penalizaciones")
     private Integer penalizacion = 0;
 
-    @Column(name = "id_oficina")
-    private Integer idOficina;
+    @ManyToOne
+    @JoinColumn(name = "id_oficina", referencedColumnName = "id")
+    private Oficina oficina;
 
     @Column(name = "creado_en")
     private LocalDateTime creadoEn;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Reserva> reservas;
 }

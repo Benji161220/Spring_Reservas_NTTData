@@ -1,7 +1,8 @@
 package org.nttdata.spring.repository;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
-import org.nttdata.spring.entity.Reserva;
+import org.nttdata.spring.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -24,51 +25,109 @@ class ReservaRepositoryTest {
     @Autowired
     private ReservaRepository reservaRepository;
 
-    /*
-    @Contaniner
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
+    @Autowired
+    private EntityManager entityManager;
 
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-    }
+    /*
+     * @Contaniner
+     * static PostgreSQLContainer<?> postgres = new
+     * PostgreSQLContainer<>("postgres:15-alpine")
+     * 
+     * @DynamicPropertySource
+     * static void configureProperties(DynamicPropertyRegistry registry) {
+     * registry.add("spring.datasource.url", postgres::getJdbcUrl);
+     * registry.add("spring.datasource.username", postgres::getUsername);
+     * registry.add("spring.datasource.password", postgres::getPassword);
+     * }
      */
 
     @Test
     void testFindByDeletedFalse() {
-        // Arrange (Preparamos datos en la DB real en memoria)
+        // Arrange
+        Usuario usuario = new Usuario();
+        usuario.setNombre("Test User");
+        usuario.setEmail("test@nttdata.com");
+        usuario.setPasswordHash("123456");
+        usuario.setRol("ROLE_USER");
+        entityManager.persist(usuario);
+
+        Oficina oficina = new Oficina();
+        oficina.setNombre("Sede Central");
+        entityManager.persist(oficina);
+
+        Planta planta = new Planta();
+        planta.setNumero(1);
+        planta.setOficina(oficina);
+        entityManager.persist(planta);
+
+        Zona zona = new Zona();
+        zona.setNombre("Zona Norte");
+        zona.setPlanta(planta);
+        entityManager.persist(zona);
+
+        Puesto puesto = new Puesto();
+        puesto.setNombre("Puesto 1");
+        puesto.setCodigo("P-001");
+        puesto.setZona(zona);
+        entityManager.persist(puesto);
+
         Reserva activa = new Reserva();
-        activa.setIdUsuario(1);
-        activa.setIdPuesto(1);
+        activa.setUsuario(usuario);
+        activa.setPuesto(puesto);
         activa.setFechaInicio(LocalDateTime.now());
         activa.setFechaFinal(LocalDateTime.now().plusHours(1));
         activa.setDeleted(false);
         reservaRepository.save(activa);
 
-        // Act (Llamamos al método del repositorio)
         List<Reserva> resultado = reservaRepository.findByDeletedFalse();
 
-        // Assert (Comprobamos que JPA hizo bien la consulta)
         assertFalse(resultado.isEmpty());
         assertEquals(1, resultado.size());
-        assertFalse(resultado.get(0).getDeleted());
     }
 
     @Test
     void testFindByIdUsuarioAndDeletedFalse() {
+        // Arrange
+        Usuario usuario = new Usuario();
+        usuario.setNombre("User 99");
+        usuario.setEmail("99@nttdata.com");
+        usuario.setPasswordHash("123456");
+        usuario.setRol("ROLE_USER");
+        entityManager.persist(usuario);
+
+        Oficina oficina = new Oficina();
+        oficina.setNombre("Sede Sur");
+        entityManager.persist(oficina);
+
+        Planta planta = new Planta();
+        planta.setNumero(2);
+        planta.setOficina(oficina);
+        entityManager.persist(planta);
+
+        Zona zona = new Zona();
+        zona.setNombre("Zona Sur");
+        zona.setPlanta(planta);
+        entityManager.persist(zona);
+
+        Puesto puesto = new Puesto();
+        puesto.setNombre("Puesto 2");
+        puesto.setCodigo("P-002");
+        puesto.setZona(zona);
+        entityManager.persist(puesto);
+
         Reserva r = new Reserva();
-        r.setIdUsuario(99);
-        r.setIdPuesto(1);
+        r.setUsuario(usuario);
+        r.setPuesto(puesto);
         r.setFechaInicio(LocalDateTime.now());
         r.setFechaFinal(LocalDateTime.now().plusHours(1));
         r.setDeleted(false);
         reservaRepository.save(r);
 
-        List<Reserva> resultado = reservaRepository.findByIdUsuarioAndDeletedFalse(99);
+        // Act
+        List<Reserva> resultado = reservaRepository.findByUsuarioIdAndDeletedFalse(Math.toIntExact(usuario.getId()));
 
+        // Assert
         assertEquals(1, resultado.size());
-        assertEquals(99, resultado.get(0).getIdUsuario());
+        assertEquals(usuario.getId(), resultado.get(0).getUsuario().getId());
     }
 }

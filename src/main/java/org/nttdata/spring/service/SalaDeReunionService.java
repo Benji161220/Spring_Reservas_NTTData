@@ -1,6 +1,7 @@
 package org.nttdata.spring.service;
 
 import org.nttdata.spring.dto.SalaDeReunionDTO;
+import org.nttdata.spring.entity.Oficina;
 import org.nttdata.spring.entity.SalaDeReunion;
 import org.nttdata.spring.exception.ResourceNotFoundException;
 import org.nttdata.spring.mapper.SalaDeReunionMapper;
@@ -47,7 +48,13 @@ public class SalaDeReunionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Sala de reunión no encontrada con id: " + id));
         sala.setNombre(dto.getNombre());
         sala.setCapacidad(dto.getCapacidad());
-        sala.setOficinaId(dto.getOficinaId());
+        if (dto.getOficinaId() != null) {
+            Oficina oficina = new Oficina();
+            oficina.setId(dto.getOficinaId());
+            sala.setOficina(oficina);
+        } else {
+            sala.setOficina(null);
+        }
         return SalaDeReunionMapper.toDTO(salaDeReunionRepository.save(sala));
     }
 

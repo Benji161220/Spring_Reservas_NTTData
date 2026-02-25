@@ -9,7 +9,9 @@ import java.util.Optional;
 
 @Repository
 public interface PuestoRepository extends JpaRepository<Puesto, Integer> {
-    List<Puesto> findByIdZona(Integer idZona);
+    List<Puesto> findByZonaId(Integer zonaId);
+
     Optional<Puesto> findByCodigo(String codigo);
+
     boolean existsByCodigo(String codigo);
 }

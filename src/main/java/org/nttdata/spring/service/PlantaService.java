@@ -1,6 +1,7 @@
 package org.nttdata.spring.service;
 
 import org.nttdata.spring.dto.PlantaDTO;
+import org.nttdata.spring.entity.Oficina;
 import org.nttdata.spring.entity.Planta;
 import org.nttdata.spring.exception.ResourceNotFoundException;
 import org.nttdata.spring.mapper.PlantaMapper;
@@ -45,7 +46,13 @@ public class PlantaService {
     public PlantaDTO update(Integer id, PlantaDTO dto) {
         Planta planta = plantaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Planta no encontrada con id: " + id));
-        planta.setOficinaId(dto.getOficinaId());
+        if (dto.getOficinaId() != null) {
+            Oficina oficina = new Oficina();
+            oficina.setId(dto.getOficinaId());
+            planta.setOficina(oficina);
+        } else {
+            planta.setOficina(null);
+        }
         planta.setNumero(dto.getNumero());
         return PlantaMapper.toDTO(plantaRepository.save(planta));
     }

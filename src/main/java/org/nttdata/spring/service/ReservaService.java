@@ -1,7 +1,9 @@
 package org.nttdata.spring.service;
 
 import org.nttdata.spring.dto.ReservaDTO;
+import org.nttdata.spring.entity.Puesto;
 import org.nttdata.spring.entity.Reserva;
+import org.nttdata.spring.entity.Usuario;
 import org.nttdata.spring.exception.ResourceNotFoundException;
 import org.nttdata.spring.mapper.ReservaMapper;
 import org.nttdata.spring.repository.ReservaRepository;
@@ -31,13 +33,13 @@ public class ReservaService {
     }
 
     public List<ReservaDTO> findByUsuarioId(Integer usuarioId) {
-        return reservaRepository.findByIdUsuarioAndDeletedFalse(usuarioId).stream()
+        return reservaRepository.findByUsuarioIdAndDeletedFalse(usuarioId).stream()
                 .map(ReservaMapper::toDTO)
                 .toList();
     }
 
     public List<ReservaDTO> findByPuestoId(Integer puestoId) {
-        return reservaRepository.findByIdPuestoAndDeletedFalse(puestoId).stream()
+        return reservaRepository.findByPuestoIdAndDeletedFalse(puestoId).stream()
                 .map(ReservaMapper::toDTO)
                 .toList();
     }
@@ -53,8 +55,20 @@ public class ReservaService {
     public ReservaDTO update(Integer id, ReservaDTO dto) {
         Reserva reserva = reservaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada con id: " + id));
-        reserva.setIdUsuario(dto.getIdUsuario());
-        reserva.setIdPuesto(dto.getIdPuesto());
+        if (dto.getIdUsuario() != null) {
+            Usuario usuario = new Usuario();
+            usuario.setId(dto.getIdUsuario().longValue());
+            reserva.setUsuario(usuario);
+        } else {
+            reserva.setUsuario(null);
+        }
+        if (dto.getIdPuesto() != null) {
+            Puesto puesto = new Puesto();
+            puesto.setId(dto.getIdPuesto());
+            reserva.setPuesto(puesto);
+        } else {
+            reserva.setPuesto(null);
+        }
         reserva.setFechaInicio(dto.getFechaInicio());
         reserva.setFechaFinal(dto.getFechaFinal());
         reserva.setAsistio(dto.getAsistio());

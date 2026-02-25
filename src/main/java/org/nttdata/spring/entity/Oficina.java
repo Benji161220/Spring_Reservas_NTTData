@@ -3,6 +3,8 @@ package org.nttdata.spring.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Data
 @Table(name = "oficinas")
@@ -14,4 +16,13 @@ public class Oficina {
 
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
+
+    @OneToMany(mappedBy = "oficina", cascade = CascadeType.ALL)
+    private List<Planta> plantas;
+
+    @OneToMany(mappedBy = "oficina", cascade = CascadeType.ALL)
+    private List<SalaDeReunion> salasDeReuniones;
+
+    @OneToMany(mappedBy = "oficina", cascade = CascadeType.ALL)
+    private List<Usuario> usuarios;
 }

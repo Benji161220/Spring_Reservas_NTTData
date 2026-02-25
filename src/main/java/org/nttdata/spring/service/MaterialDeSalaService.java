@@ -1,7 +1,9 @@
 package org.nttdata.spring.service;
 
 import org.nttdata.spring.dto.MaterialDeSalaDTO;
+import org.nttdata.spring.entity.Material;
 import org.nttdata.spring.entity.MaterialDeSala;
+import org.nttdata.spring.entity.SalaDeReunion;
 import org.nttdata.spring.exception.ResourceNotFoundException;
 import org.nttdata.spring.mapper.MaterialDeSalaMapper;
 import org.nttdata.spring.repository.MaterialDeSalaRepository;
@@ -45,8 +47,20 @@ public class MaterialDeSalaService {
     public MaterialDeSalaDTO update(Integer id, MaterialDeSalaDTO dto) {
         MaterialDeSala materialDeSala = materialDeSalaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Material de sala no encontrado con id: " + id));
-        materialDeSala.setSalaId(dto.getSalaId());
-        materialDeSala.setMaterialId(dto.getMaterialId());
+        if (dto.getSalaId() != null) {
+            SalaDeReunion sala = new SalaDeReunion();
+            sala.setId(dto.getSalaId());
+            materialDeSala.setSala(sala);
+        } else {
+            materialDeSala.setSala(null);
+        }
+        if (dto.getMaterialId() != null) {
+            Material material = new Material();
+            material.setId(dto.getMaterialId());
+            materialDeSala.setMaterial(material);
+        } else {
+            materialDeSala.setMaterial(null);
+        }
         materialDeSala.setCantidad(dto.getCantidad());
         return MaterialDeSalaMapper.toDTO(materialDeSalaRepository.save(materialDeSala));
     }
