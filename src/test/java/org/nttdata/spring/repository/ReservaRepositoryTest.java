@@ -5,6 +5,8 @@ import org.nttdata.spring.entity.Reserva;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 // import org.testcontainers.junit.jupiter.Container;
 // import org.testcontainers.junit.jupiter.Testcontainers;
 @DataJpaTest
+@Testcontainers
 // replace = Replace.Any hace que use H2 automáticamente
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 class ReservaRepositoryTest {
