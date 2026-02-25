@@ -75,5 +75,5 @@ jobs:
           region: us-east-1
           application_name: Reservas-NTTDataAPI
           environment_name: Reservas-NTTDataAPI-env
-          version_label: "hogwarts-v-${{ github.run_number }}"
+          version_label: "reservas-${{ github.run_number }}"
           deployment_package: docker-compose.yml
