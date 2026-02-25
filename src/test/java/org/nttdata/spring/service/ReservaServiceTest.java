@@ -35,7 +35,7 @@ class ReservaServiceTest {
         reserva = new Reserva();
         reserva.setId(1);
         reserva.setIdUsuario(1);
-        reserva.setIdZona(1);
+        reserva.setIdPuesto(1);
         reserva.setFechaInicio(LocalDateTime.of(2024, 1, 1, 9, 0));
         reserva.setFechaFinal(LocalDateTime.of(2024, 1, 1, 10, 0));
         reserva.setAsistio(true);
@@ -73,7 +73,7 @@ class ReservaServiceTest {
     void create_success() {
         ReservaDTO dto = new ReservaDTO();
         dto.setIdUsuario(1);
-        dto.setIdZona(1);
+        dto.setIdPuesto(1);
         dto.setFechaInicio(LocalDateTime.of(2024, 1, 1, 9, 0));
         dto.setFechaFinal(LocalDateTime.of(2024, 1, 1, 10, 0));
 
