@@ -1,10 +1,14 @@
 package org.nttdata.spring.service;
 
 import org.nttdata.spring.dto.ReservaDTO;
+import org.nttdata.spring.entity.Puesto;
 import org.nttdata.spring.entity.Reserva;
+import org.nttdata.spring.entity.Usuario;
 import org.nttdata.spring.exception.ResourceNotFoundException;
 import org.nttdata.spring.mapper.ReservaMapper;
+import org.nttdata.spring.repository.PuestoRepository;
 import org.nttdata.spring.repository.ReservaRepository;
+import org.nttdata.spring.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,58 +17,32 @@ import java.util.List;
 public class ReservaService {
 
     private final ReservaRepository reservaRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final PuestoRepository puestoRepository;
 
-    public ReservaService(ReservaRepository reservaRepository) {
+    public ReservaService(ReservaRepository reservaRepository,
+                          UsuarioRepository usuarioRepository,
+                          PuestoRepository puestoRepository) {
         this.reservaRepository = reservaRepository;
-    }
-
-    public List<ReservaDTO> findAll() {
-        return reservaRepository.findByDeletedFalse().stream()
-                .map(ReservaMapper::toDTO)
-                .toList();
-    }
-
-    public ReservaDTO findById(Integer id) {
-        Reserva reserva = reservaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada con id: " + id));
-        return ReservaMapper.toDTO(reserva);
-    }
-
-    public List<ReservaDTO> findByUsuarioId(Integer usuarioId) {
-        return reservaRepository.findByIdUsuarioAndDeletedFalse(usuarioId).stream()
-                .map(ReservaMapper::toDTO)
-                .toList();
-    }
-
-    public List<ReservaDTO> findByPuestoId(Integer puestoId) {
-        return reservaRepository.findByIdPuestoAndDeletedFalse(puestoId).stream()
-                .map(ReservaMapper::toDTO)
-                .toList();
+        this.usuarioRepository = usuarioRepository;
+        this.puestoRepository = puestoRepository;
     }
 
     public ReservaDTO create(ReservaDTO dto) {
-        Reserva reserva = ReservaMapper.toEntity(dto);
-        reserva.setId(null);
-        reserva.setAsistio(null);
-        reserva.setDeleted(false);
-        return ReservaMapper.toDTO(reservaRepository.save(reserva));
-    }
 
-    public ReservaDTO update(Integer id, ReservaDTO dto) {
-        Reserva reserva = reservaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada con id: " + id));
-        reserva.setIdUsuario(dto.getIdUsuario());
-        reserva.setIdPuesto(dto.getIdPuesto());
+        Usuario usuario = usuarioRepository.findById(Long.valueOf(dto.getIdUsuario()))
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
+        Puesto puesto = puestoRepository.findById(dto.getIdPuesto())
+                .orElseThrow(() -> new ResourceNotFoundException("Puesto no encontrado"));
+
+        Reserva reserva = new Reserva();
+        reserva.setUsuario(usuario);
+        reserva.setPuesto(puesto);
         reserva.setFechaInicio(dto.getFechaInicio());
         reserva.setFechaFinal(dto.getFechaFinal());
-        reserva.setAsistio(dto.getAsistio());
-        return ReservaMapper.toDTO(reservaRepository.save(reserva));
-    }
+        reserva.setDeleted(false);
 
-    public void softDelete(Integer id) {
-        Reserva reserva = reservaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada con id: " + id));
-        reserva.setDeleted(true);
-        reservaRepository.save(reserva);
+        return ReservaMapper.toDTO(reservaRepository.save(reserva));
     }
 }

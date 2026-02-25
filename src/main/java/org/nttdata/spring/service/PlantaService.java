@@ -1,9 +1,11 @@
 package org.nttdata.spring.service;
 
 import org.nttdata.spring.dto.PlantaDTO;
+import org.nttdata.spring.entity.Oficina;
 import org.nttdata.spring.entity.Planta;
 import org.nttdata.spring.exception.ResourceNotFoundException;
 import org.nttdata.spring.mapper.PlantaMapper;
+import org.nttdata.spring.repository.OficinaRepository;
 import org.nttdata.spring.repository.PlantaRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,47 +15,37 @@ import java.util.List;
 public class PlantaService {
 
     private final PlantaRepository plantaRepository;
+    private final OficinaRepository oficinaRepository;
 
-    public PlantaService(PlantaRepository plantaRepository) {
+    public PlantaService(PlantaRepository plantaRepository,
+                         OficinaRepository oficinaRepository) {
         this.plantaRepository = plantaRepository;
-    }
-
-    public List<PlantaDTO> findAll() {
-        return plantaRepository.findAll().stream()
-                .map(PlantaMapper::toDTO)
-                .toList();
-    }
-
-    public PlantaDTO findById(Integer id) {
-        Planta planta = plantaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Planta no encontrada con id: " + id));
-        return PlantaMapper.toDTO(planta);
-    }
-
-    public List<PlantaDTO> findByOficinaId(Integer oficinaId) {
-        return plantaRepository.findByOficinaId(oficinaId).stream()
-                .map(PlantaMapper::toDTO)
-                .toList();
+        this.oficinaRepository = oficinaRepository;
     }
 
     public PlantaDTO create(PlantaDTO dto) {
-        Planta planta = PlantaMapper.toEntity(dto);
-        planta.setId(null);
+
+        Oficina oficina = oficinaRepository.findById(dto.getOficinaId())
+                .orElseThrow(() -> new ResourceNotFoundException("Oficina no encontrada"));
+
+        Planta planta = new Planta();
+        planta.setNumero(dto.getNumero());
+        planta.setOficina(oficina);
+
         return PlantaMapper.toDTO(plantaRepository.save(planta));
     }
 
     public PlantaDTO update(Integer id, PlantaDTO dto) {
-        Planta planta = plantaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Planta no encontrada con id: " + id));
-        planta.setOficinaId(dto.getOficinaId());
-        planta.setNumero(dto.getNumero());
-        return PlantaMapper.toDTO(plantaRepository.save(planta));
-    }
 
-    public void delete(Integer id) {
-        if (!plantaRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Planta no encontrada con id: " + id);
-        }
-        plantaRepository.deleteById(id);
+        Planta planta = plantaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Planta no encontrada"));
+
+        Oficina oficina = oficinaRepository.findById(dto.getOficinaId())
+                .orElseThrow(() -> new ResourceNotFoundException("Oficina no encontrada"));
+
+        planta.setNumero(dto.getNumero());
+        planta.setOficina(oficina);
+
+        return PlantaMapper.toDTO(plantaRepository.save(planta));
     }
 }
