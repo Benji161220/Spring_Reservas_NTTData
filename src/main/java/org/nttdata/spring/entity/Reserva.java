@@ -11,6 +11,10 @@ import java.time.LocalDateTime;
 @Table(name = "reservas")
 public class Reserva {
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", insertable = false, updatable = false)
+    private Usuario usuario;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
