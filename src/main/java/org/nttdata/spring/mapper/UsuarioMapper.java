@@ -5,7 +5,8 @@ import org.nttdata.spring.entity.Usuario;
 
 public class UsuarioMapper {
 
-    private UsuarioMapper() {}
+    private UsuarioMapper() {
+    }
 
     public static UsuarioDTO toDTO(Usuario entity) {
         UsuarioDTO dto = new UsuarioDTO();
@@ -14,7 +15,7 @@ public class UsuarioMapper {
         dto.setEmail(entity.getEmail());
         dto.setRol(entity.getRol());
         dto.setPenalizacion(entity.getPenalizacion());
-        dto.setOficinaActual(entity.getIdOficina());
+        dto.setOficinaActual(entity.getOficina() != null ? entity.getOficina().getId() : null);
         dto.setCreadoEn(entity.getCreadoEn());
         return dto;
     }

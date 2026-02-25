@@ -1,6 +1,7 @@
 package org.nttdata.spring.service;
 
 import org.nttdata.spring.dto.ZonaDTO;
+import org.nttdata.spring.entity.Planta;
 import org.nttdata.spring.entity.Zona;
 import org.nttdata.spring.exception.ResourceNotFoundException;
 import org.nttdata.spring.mapper.ZonaMapper;
@@ -31,7 +32,7 @@ public class ZonaService {
     }
 
     public List<ZonaDTO> findByPlantaId(Integer plantaId) {
-        return zonaRepository.findByIdPlanta(plantaId).stream()
+        return zonaRepository.findByPlantaId(plantaId).stream()
                 .map(ZonaMapper::toDTO)
                 .toList();
     }
@@ -45,7 +46,13 @@ public class ZonaService {
     public ZonaDTO update(Integer id, ZonaDTO dto) {
         Zona zona = zonaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Zona no encontrada con id: " + id));
-        zona.setIdPlanta(dto.getIdPlanta());
+        if (dto.getIdPlanta() != null) {
+            Planta planta = new Planta();
+            planta.setId(dto.getIdPlanta());
+            zona.setPlanta(planta);
+        } else {
+            zona.setPlanta(null);
+        }
         zona.setNombre(dto.getNombre());
         return ZonaMapper.toDTO(zonaRepository.save(zona));
     }

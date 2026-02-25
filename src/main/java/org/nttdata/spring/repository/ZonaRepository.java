@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ZonaRepository extends JpaRepository<Zona, Integer> {
-    List<Zona> findByIdPlanta(Integer idPlanta);
+    List<Zona> findByPlantaId(Integer plantaId);
 }

@@ -1,6 +1,7 @@
 package org.nttdata.spring.service;
 
 import org.nttdata.spring.dto.UsuarioDTO;
+import org.nttdata.spring.entity.Oficina;
 import org.nttdata.spring.entity.Usuario;
 import org.nttdata.spring.exception.ResourceNotFoundException;
 import org.nttdata.spring.mapper.UsuarioMapper;
@@ -36,7 +37,13 @@ public class UsuarioService {
         usuario.setNombre(dto.getNombre());
         usuario.setRol(dto.getRol());
         usuario.setPenalizacion(dto.getPenalizacion());
-        usuario.setIdOficina(dto.getOficinaActual());
+        if (dto.getOficinaActual() != null) {
+            Oficina oficina = new Oficina();
+            oficina.setId(dto.getOficinaActual());
+            usuario.setOficina(oficina);
+        } else {
+            usuario.setOficina(null);
+        }
         return UsuarioMapper.toDTO(usuarioRepository.save(usuario));
     }
 
