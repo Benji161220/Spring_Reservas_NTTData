@@ -1,11 +1,9 @@
 package org.nttdata.spring.service;
 
 import org.nttdata.spring.dto.ZonaDTO;
-import org.nttdata.spring.entity.Planta;
 import org.nttdata.spring.entity.Zona;
 import org.nttdata.spring.exception.ResourceNotFoundException;
 import org.nttdata.spring.mapper.ZonaMapper;
-import org.nttdata.spring.repository.PlantaRepository;
 import org.nttdata.spring.repository.ZonaRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +13,9 @@ import java.util.List;
 public class ZonaService {
 
     private final ZonaRepository zonaRepository;
-    private final PlantaRepository plantaRepository;
 
-    public ZonaService(ZonaRepository zonaRepository,
-                       PlantaRepository plantaRepository) {
+    public ZonaService(ZonaRepository zonaRepository) {
         this.zonaRepository = zonaRepository;
-        this.plantaRepository = plantaRepository;
     }
 
     public List<ZonaDTO> findAll() {
@@ -35,29 +30,23 @@ public class ZonaService {
         return ZonaMapper.toDTO(zona);
     }
 
+    public List<ZonaDTO> findByPlantaId(Integer plantaId) {
+        return zonaRepository.findByIdPlanta(plantaId).stream()
+                .map(ZonaMapper::toDTO)
+                .toList();
+    }
+
     public ZonaDTO create(ZonaDTO dto) {
-
-        Planta planta = plantaRepository.findById(dto.getIdPlanta())
-                .orElseThrow(() -> new ResourceNotFoundException("Planta no encontrada"));
-
-        Zona zona = new Zona();
-        zona.setNombre(dto.getNombre());
-        zona.setPlanta(planta);
-
+        Zona zona = ZonaMapper.toEntity(dto);
+        zona.setId(null);
         return ZonaMapper.toDTO(zonaRepository.save(zona));
     }
 
     public ZonaDTO update(Integer id, ZonaDTO dto) {
-
         Zona zona = zonaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Zona no encontrada con id: " + id));
-
-        Planta planta = plantaRepository.findById(dto.getIdPlanta())
-                .orElseThrow(() -> new ResourceNotFoundException("Planta no encontrada"));
-
+        zona.setIdPlanta(dto.getIdPlanta());
         zona.setNombre(dto.getNombre());
-        zona.setPlanta(planta);
-
         return ZonaMapper.toDTO(zonaRepository.save(zona));
     }
 

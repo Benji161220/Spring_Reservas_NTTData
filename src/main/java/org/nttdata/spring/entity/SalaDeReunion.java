@@ -3,8 +3,6 @@ package org.nttdata.spring.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
 @Entity
 @Data
 @Table(name = "salas_de_reuniones")
@@ -20,10 +18,6 @@ public class SalaDeReunion {
     @Column(name = "capacidad", nullable = false)
     private Integer capacidad;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "oficina_id", nullable = false)
-    private Oficina oficina;
-
-    @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL)
-    private List<MaterialDeSala> materiales;
+    @Column(name = "oficina_id", nullable = false)
+    private Integer oficinaId;
 }

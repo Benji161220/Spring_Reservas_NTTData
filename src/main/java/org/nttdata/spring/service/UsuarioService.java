@@ -1,11 +1,9 @@
 package org.nttdata.spring.service;
 
 import org.nttdata.spring.dto.UsuarioDTO;
-import org.nttdata.spring.entity.Oficina;
 import org.nttdata.spring.entity.Usuario;
 import org.nttdata.spring.exception.ResourceNotFoundException;
 import org.nttdata.spring.mapper.UsuarioMapper;
-import org.nttdata.spring.repository.OficinaRepository;
 import org.nttdata.spring.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +13,9 @@ import java.util.List;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
-    private final OficinaRepository oficinaRepository;
 
-    public UsuarioService(UsuarioRepository usuarioRepository,
-                          OficinaRepository oficinaRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
-        this.oficinaRepository = oficinaRepository;
     }
 
     public List<UsuarioDTO> findAll() {
@@ -36,18 +31,12 @@ public class UsuarioService {
     }
 
     public UsuarioDTO update(Long id, UsuarioDTO dto) {
-
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con id: " + id));
-
-        Oficina oficina = oficinaRepository.findById(dto.getOficinaActual())
-                .orElseThrow(() -> new ResourceNotFoundException("Oficina no encontrada"));
-
         usuario.setNombre(dto.getNombre());
         usuario.setRol(dto.getRol());
         usuario.setPenalizacion(dto.getPenalizacion());
-        usuario.setOficina(oficina);
-
+        usuario.setIdOficina(dto.getOficinaActual());
         return UsuarioMapper.toDTO(usuarioRepository.save(usuario));
     }
 

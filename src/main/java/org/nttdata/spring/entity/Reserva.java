@@ -19,9 +19,11 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_puesto", nullable = false)
-    private Puesto puesto;
+    @Column(name = "id_usuario", nullable = false)
+    private Integer idUsuario;
+
+    @Column(name = "id_puesto", nullable = false)
+    private Integer idPuesto;
 
     @Column(name = "fecha_inicio", nullable = false)
     private LocalDateTime fechaInicio;
