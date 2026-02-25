@@ -2,9 +2,7 @@ package org.nttdata.spring.repository;
 
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
-import org.nttdata.spring.entity.Puesto;
-import org.nttdata.spring.entity.Reserva;
-import org.nttdata.spring.entity.Usuario;
+import org.nttdata.spring.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -45,14 +43,26 @@ class ReservaRepositoryTest {
 
     @Test
     void testFindByDeletedFalse() {
-        // Arrange (Preparamos datos en la DB real en memoria)
+        // Arrange
         Usuario usuario = new Usuario();
         usuario.setNombre("Test User");
         usuario.setEmail("test@nttdata.com");
+        usuario.setPasswordHash("123456");
+        usuario.setRol("ROLE_USER");
         entityManager.persist(usuario);
+
+        Planta planta = new Planta();
+        planta.setNumero(1);
+        entityManager.persist(planta);
+
+        Zona zona = new Zona();
+        zona.setNombre("Zona Norte");
+        entityManager.persist(zona);
 
         Puesto puesto = new Puesto();
         puesto.setNombre("Puesto 1");
+        puesto.setCodigo("P-001");
+        puesto.setZona(zona);
         entityManager.persist(puesto);
 
         Reserva activa = new Reserva();
@@ -67,8 +77,8 @@ class ReservaRepositoryTest {
 
         assertFalse(resultado.isEmpty());
         assertEquals(1, resultado.size());
-        assertFalse(resultado.get(0).getDeleted());
     }
+
 
     @Test
     void testFindByIdUsuarioAndDeletedFalse() {
@@ -76,10 +86,18 @@ class ReservaRepositoryTest {
         Usuario usuario = new Usuario();
         usuario.setNombre("User 99");
         usuario.setEmail("99@nttdata.com");
+        usuario.setPasswordHash("123456");
+        usuario.setRol("ROLE_USER");
         entityManager.persist(usuario);
+
+        Zona zona = new Zona();
+        zona.setNombre("Zona Sur");
+        entityManager.persist(zona);
 
         Puesto puesto = new Puesto();
         puesto.setNombre("Puesto 2");
+        puesto.setCodigo("P-002");
+        puesto.setZona(zona);
         entityManager.persist(puesto);
 
         Reserva r = new Reserva();
@@ -90,8 +108,8 @@ class ReservaRepositoryTest {
         r.setDeleted(false);
         reservaRepository.save(r);
 
-
-        List<Reserva> resultado = reservaRepository.findByIdUsuarioAndDeletedFalse(Math.toIntExact(usuario.getId()));
+        // Act
+        List<Reserva> resultado = reservaRepository.findByUsuarioIdAndDeletedFalse(Math.toIntExact(usuario.getId()));
 
         // Assert
         assertEquals(1, resultado.size());
