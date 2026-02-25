@@ -51,12 +51,18 @@ class ReservaRepositoryTest {
         usuario.setRol("ROLE_USER");
         entityManager.persist(usuario);
 
+        Oficina oficina = new Oficina();
+        oficina.setNombre("Sede Central");
+        entityManager.persist(oficina);
+
         Planta planta = new Planta();
         planta.setNumero(1);
+        planta.setOficina(oficina);
         entityManager.persist(planta);
 
         Zona zona = new Zona();
         zona.setNombre("Zona Norte");
+        zona.setPlanta(planta);
         entityManager.persist(zona);
 
         Puesto puesto = new Puesto();
@@ -79,7 +85,6 @@ class ReservaRepositoryTest {
         assertEquals(1, resultado.size());
     }
 
-
     @Test
     void testFindByIdUsuarioAndDeletedFalse() {
         // Arrange
@@ -90,8 +95,18 @@ class ReservaRepositoryTest {
         usuario.setRol("ROLE_USER");
         entityManager.persist(usuario);
 
+        Oficina oficina = new Oficina();
+        oficina.setNombre("Sede Sur");
+        entityManager.persist(oficina);
+
+        Planta planta = new Planta();
+        planta.setNumero(2);
+        planta.setOficina(oficina);
+        entityManager.persist(planta);
+
         Zona zona = new Zona();
         zona.setNombre("Zona Sur");
+        zona.setPlanta(planta);
         entityManager.persist(zona);
 
         Puesto puesto = new Puesto();
