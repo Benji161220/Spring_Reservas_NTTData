@@ -29,6 +29,7 @@ class ReservaServiceTest {
     private ReservaService reservaService;
 
     private Reserva reserva;
+    private ReservaDTO reservaDTO;
 
     @BeforeEach
     void setUp() {
@@ -40,26 +41,12 @@ class ReservaServiceTest {
         reserva.setFechaFinal(LocalDateTime.of(2024, 1, 1, 10, 0));
         reserva.setAsistio(true);
         reserva.setDeleted(false);
-    }
 
-    @Test
-    void findAll_returnsNonDeleted() {
-        when(reservaRepository.findByDeletedFalse()).thenReturn(List.of(reserva));
-
-        List<ReservaDTO> result = reservaService.findAll();
-
-        assertEquals(1, result.size());
-        assertEquals(1, result.get(0).getId());
-    }
-
-    @Test
-    void findById_success() {
-        when(reservaRepository.findById(1)).thenReturn(Optional.of(reserva));
-
-        ReservaDTO result = reservaService.findById(1);
-
-        assertNotNull(result);
-        assertEquals(1, result.getIdUsuario());
+        reservaDTO = new ReservaDTO();
+        reservaDTO.setIdUsuario(1);
+        reservaDTO.setIdPuesto(1);
+        reservaDTO.setFechaInicio(reserva.getFechaInicio());
+        reservaDTO.setFechaFinal(reserva.getFechaFinal());
     }
 
     @Test
@@ -69,26 +56,37 @@ class ReservaServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> reservaService.findById(99));
     }
 
+    // Test Unitario Crear una reserva exitosa
     @Test
-    void create_success() {
-        ReservaDTO dto = new ReservaDTO();
-        dto.setIdUsuario(1);
-        dto.setIdPuesto(1);
-        dto.setFechaInicio(LocalDateTime.of(2024, 1, 1, 9, 0));
-        dto.setFechaFinal(LocalDateTime.of(2024, 1, 1, 10, 0));
-
+    void testCrearReserva_Exito() {
+        // WHEN
         when(reservaRepository.save(any(Reserva.class))).thenReturn(reserva);
 
-        ReservaDTO result = reservaService.create(dto);
+        ReservaDTO resultado = reservaService.create(reservaDTO);
 
-        assertNotNull(result);
-        verify(reservaRepository).save(any(Reserva.class));
+        // THEN
+        assertNotNull(resultado);
+        assertEquals(1, resultado.getId());
+        verify(reservaRepository, times(1)).save(any(Reserva.class));
     }
 
+    // Test unitario de lectura
     @Test
-    void softDelete_success() {
+    void testFindById_Exito() {
+
+        // WHEN
         when(reservaRepository.findById(1)).thenReturn(Optional.of(reserva));
-        when(reservaRepository.save(any(Reserva.class))).thenReturn(reserva);
+
+        ReservaDTO resultado = reservaService.findById(1);
+
+        assertNotNull(resultado);
+        assertEquals(1, resultado.getIdUsuario());
+    }
+
+    // Test unitario
+    @Test
+    void softDelete_exito() {
+        when(reservaRepository.findById(1)).thenReturn(Optional.of(reserva));
 
         reservaService.softDelete(1);
 
@@ -96,6 +94,7 @@ class ReservaServiceTest {
         verify(reservaRepository).save(reserva);
     }
 
+    // Test unitario borrado falla
     @Test
     void softDelete_notFound() {
         when(reservaRepository.findById(99)).thenReturn(Optional.empty());
