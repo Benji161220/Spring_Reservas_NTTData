@@ -38,6 +38,7 @@ public class ReservaControllerTest {
     @WithMockUser // Simula un usuario para que el test no de error 401/403
     void crearReserva_Endpoint_DebeRetornar201() throws Exception {
         ReservaDTO dto = new ReservaDTO();
+        dto.setId(1);
         dto.setIdUsuario(1);
         dto.setIdPuesto(1);
         dto.setFechaInicio(java.time.LocalDateTime.now());
