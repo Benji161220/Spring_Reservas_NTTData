@@ -12,8 +12,9 @@ public class Puesto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "id_zona", nullable = false)
-    private Integer idZona;
+    @ManyToOne
+    @JoinColumn(name = "id_zona", nullable = false)
+    private Zona zona;
 
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;

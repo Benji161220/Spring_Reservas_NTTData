@@ -18,6 +18,7 @@ public class SalaDeReunion {
     @Column(name = "capacidad", nullable = false)
     private Integer capacidad;
 
-    @Column(name = "oficina_id", nullable = false)
-    private Integer oficinaId;
+    @ManyToOne
+    @JoinColumn(name = "oficina_id", nullable = false)
+    private Oficina oficina;
 }

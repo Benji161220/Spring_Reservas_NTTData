@@ -12,11 +12,14 @@ public class MaterialDeSala {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "sala_id", nullable = false)
-    private Integer salaId;
+    @ManyToOne
+    @JoinColumn(name = "sala_id", nullable = false)
+    private SalaDeReunion sala;
 
-    @Column(name = "material_id", nullable = false)
-    private Integer materialId;
+    @ManyToOne
+    @JoinColumn(name = "material_id", nullable = false)
+    private Material material;
+
 
     @Column(name = "cantidad", nullable = false)
     private Integer cantidad;

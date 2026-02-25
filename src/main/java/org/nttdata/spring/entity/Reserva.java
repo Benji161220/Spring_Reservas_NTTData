@@ -10,20 +10,17 @@ import java.time.LocalDateTime;
 @Data
 @Table(name = "reservas")
 public class Reserva {
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario", insertable = false, updatable = false)
-    private Usuario usuario;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "id_usuario", nullable = false)
-    private Integer idUsuario;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
 
-    @Column(name = "id_puesto", nullable = false)
-    private Integer idPuesto;
+    @ManyToOne
+    @JoinColumn(name = "id_puesto", nullable = false)
+    private Puesto puesto;
 
     @Column(name = "fecha_inicio", nullable = false)
     private LocalDateTime fechaInicio;
