@@ -2,7 +2,7 @@ name: Deploy Docker a Elastic Beanstalk
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "backend-sin-autenticacion" ]
 
 permissions:
   contents: read
