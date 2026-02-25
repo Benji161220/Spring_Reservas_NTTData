@@ -74,6 +74,6 @@ jobs:
           aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
           region: us-east-1
           application_name: Reservas-NTTDataAPI
-          environment_name: Reservas-NTTDataAPI-env
+          environment_name: Reservas-NTTDataAPI-env-1
           version_label: "reservas-${{ github.run_number }}"
           deployment_package: docker-compose.yml
