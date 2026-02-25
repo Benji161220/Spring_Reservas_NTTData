@@ -7,7 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.nttdata.spring.dto.ReservaDTO;
+import org.nttdata.spring.entity.Puesto;
 import org.nttdata.spring.entity.Reserva;
+import org.nttdata.spring.entity.Usuario;
 import org.nttdata.spring.exception.ResourceNotFoundException;
 import org.nttdata.spring.repository.ReservaRepository;
 
@@ -33,16 +35,24 @@ class ReservaServiceTest {
 
     @BeforeEach
     void setUp() {
+        // Creamos objetos Mock para las relaciones
+        Usuario mockUsuario = new Usuario();
+        mockUsuario.setId(1L);
+
+        Puesto mockPuesto = new Puesto();
+        mockPuesto.setId(1);
+
         reserva = new Reserva();
         reserva.setId(1);
-        reserva.setIdUsuario(1);
-        reserva.setIdPuesto(1);
+        reserva.setUsuario(mockUsuario);
+        reserva.setPuesto(mockPuesto);
         reserva.setFechaInicio(LocalDateTime.of(2024, 1, 1, 9, 0));
         reserva.setFechaFinal(LocalDateTime.of(2024, 1, 1, 10, 0));
         reserva.setAsistio(true);
         reserva.setDeleted(false);
 
         reservaDTO = new ReservaDTO();
+        reservaDTO.setId(1);
         reservaDTO.setIdUsuario(1);
         reservaDTO.setIdPuesto(1);
         reservaDTO.setFechaInicio(reserva.getFechaInicio());
