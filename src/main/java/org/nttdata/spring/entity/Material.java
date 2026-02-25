@@ -3,6 +3,8 @@ package org.nttdata.spring.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Data
 @Table(name = "materiales")
@@ -17,4 +19,7 @@ public class Material {
 
     @Column(name = "cantidad_total", nullable = false)
     private Integer cantidadTotal;
+
+    @OneToMany(mappedBy = "material")
+    private List<MaterialDeSala> salas;
 }

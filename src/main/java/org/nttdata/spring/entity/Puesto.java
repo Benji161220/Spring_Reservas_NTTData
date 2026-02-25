@@ -3,6 +3,8 @@ package org.nttdata.spring.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Data
 @Table(name = "puestos")
@@ -12,8 +14,12 @@ public class Puesto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "id_zona", nullable = false)
-    private Integer idZona;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_zona", nullable = false)
+    private Zona zona;
+
+    @OneToMany(mappedBy = "puesto")
+    private List<Reserva> reservas;
 
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;

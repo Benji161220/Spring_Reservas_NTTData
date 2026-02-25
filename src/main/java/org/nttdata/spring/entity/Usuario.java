@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,6 +21,9 @@ public class Usuario {
     @Column(name = "email", nullable = false, unique = true, length = 150)
     private String email;
 
+    @OneToMany(mappedBy = "usuario")
+    private List<Reserva> reservas;
+
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
@@ -29,8 +33,10 @@ public class Usuario {
     @Column(name = "penalizaciones")
     private Integer penalizacion = 0;
 
-    @Column(name = "id_oficina")
-    private Integer idOficina;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_oficina")
+    private Oficina oficina;
+
 
     @Column(name = "creado_en")
     private LocalDateTime creadoEn;

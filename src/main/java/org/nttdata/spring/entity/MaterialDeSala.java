@@ -12,11 +12,14 @@ public class MaterialDeSala {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "sala_id", nullable = false)
-    private Integer salaId;
 
-    @Column(name = "material_id", nullable = false)
-    private Integer materialId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sala_id", nullable = false)
+    private SalaDeReunion sala;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "material_id", nullable = false)
+    private Material material;
 
     @Column(name = "cantidad", nullable = false)
     private Integer cantidad;
