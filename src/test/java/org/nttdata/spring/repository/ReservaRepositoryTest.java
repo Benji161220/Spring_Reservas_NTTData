@@ -1,6 +1,7 @@
 package org.nttdata.spring.repository;
 
 import org.junit.jupiter.api.Test;
+import org.nttdata.spring.entity.Puesto;
 import org.nttdata.spring.entity.Reserva;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -40,8 +41,8 @@ class ReservaRepositoryTest {
     void testFindByDeletedFalse() {
         // Arrange (Preparamos datos en la DB real en memoria)
         Reserva activa = new Reserva();
-        activa.setIdUsuario(1);
-        activa.setIdPuesto(1);
+        activa.setId(1);
+        activa.setPuesto(new Puesto());
         activa.setFechaInicio(LocalDateTime.now());
         activa.setFechaFinal(LocalDateTime.now().plusHours(1));
         activa.setDeleted(false);
@@ -59,8 +60,8 @@ class ReservaRepositoryTest {
     @Test
     void testFindByIdUsuarioAndDeletedFalse() {
         Reserva r = new Reserva();
-        r.setIdUsuario(99);
-        r.setIdPuesto(1);
+        r.setId(99);
+        r.setPuesto(new Puesto());
         r.setFechaInicio(LocalDateTime.now());
         r.setFechaFinal(LocalDateTime.now().plusHours(1));
         r.setDeleted(false);
@@ -69,6 +70,6 @@ class ReservaRepositoryTest {
         List<Reserva> resultado = reservaRepository.findByIdUsuarioAndDeletedFalse(99);
 
         assertEquals(1, resultado.size());
-        assertEquals(99, resultado.get(0).getIdUsuario());
+        assertEquals(99, resultado.get(0).getId());
     }
 }
